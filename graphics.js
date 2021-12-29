@@ -1,4 +1,4 @@
-function drawRectangle(x, y, width, height, color, borderWidth, borderColor) {
+function drawRectangle(context, x, y, width, height, color, borderWidth, borderColor) {
     context.beginPath();
     context.rect(x, y, width, height);
     context.fillStyle = color;
