@@ -1,5 +1,6 @@
 const length = 25;
 var arr = [];
+var nextArr = [];
 var count = 0;
 var piece;
 var field = [
@@ -159,14 +160,17 @@ function getPiece() {
 function getRandom() {
     if(count % 7 == 0) {
         arr = [new I, new T, new J, new L, new S, new Z, new O];
-        index = arr.length;
-        while (index > 0) {
-            index --;
-            rnd = getRandomNumber(0, index);
-            [arr[index], arr[rnd]] = [arr[rnd], arr[index]];
-        }
+           
     }
     return arr[count % 7];
+}
+function shuffle(arr) {
+    index = arr.length;
+    while (index > 0) {
+        index --;
+        rnd = getRandomNumber(0, index);
+        [arr[index], arr[rnd]] = [arr[rnd], arr[index]];
+    }     
 }
 
 function draw() {

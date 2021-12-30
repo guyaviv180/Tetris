@@ -1,8 +1,17 @@
 canvas {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 800px;
+    background-color:white;
+    border: 1px solid black;
+}
+
+.main{
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+    
+}
+
+.next{
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
 }
