@@ -1,6 +1,8 @@
 const length = 25;
+const pieces = [new I, new T, new J, new L, new S, new Z, new O]
+var nextArr = shuffle(pieces);
 var arr = [];
-var nextArr = [];
+
 var count = 0;
 var piece;
 var field = [
@@ -45,6 +47,37 @@ function update() {
     }
     piece.move("down");
     draw();
+}
+
+function getPiece() {
+    piece = arr[count % 7];
+    stop = false;
+}
+
+function loadArray() {
+    if(count % 7 == 0) {
+        arr = nextArr;
+        arr = shuffle(pieces);
+
+           
+    }
+}
+function shuffle(arr) {
+    index = arr.length;
+    while (index > 0) {
+        index --;
+        rnd = getRandomNumber(0, index);
+        [arr[index], arr[rnd]] = [arr[rnd], arr[index]];
+    }
+    return arr
+}
+
+function drawNext(){
+    drawRectangle(ctx, 0, 0, length * 4, length * 4, "white")
+    if
+    for (var i = 0; i < 4; i++){
+        drawRectangle(ctx, arr[(count % 7) + 1].Block[i].x - 75, arr[(count % 7) + 1].Block[i].y, length, length, arr[(count % 7) + 1].color, 1, "white");
+    }
 }
 
 function movePiece(direction) {
@@ -152,27 +185,6 @@ function changeField() {
     }
 }
 
-function getPiece() {
-    piece = getRandom();
-    stop = false;
-}
-
-function getRandom() {
-    if(count % 7 == 0) {
-        arr = [new I, new T, new J, new L, new S, new Z, new O];
-           
-    }
-    return arr[count % 7];
-}
-function shuffle(arr) {
-    index = arr.length;
-    while (index > 0) {
-        index --;
-        rnd = getRandomNumber(0, index);
-        [arr[index], arr[rnd]] = [arr[rnd], arr[index]];
-    }     
-}
-
 function draw() {
     //drawBoard();
     drawPieces();
@@ -198,13 +210,6 @@ function drawBoard() {
     }
     for (var i = 1; i < 20; i++) {
         drawLine(0, (length * i), (length * 10), (length * i), 1, "grey");
-    }
-}
-
-function drawNext(){
-    drawRectangle(ctx, 0, 0, length * 4, length * 4, "white")
-    for (var i = 0; i < 4; i++){
-        drawRectangle(ctx, arr[(count % 7) + 1].Block[i].x - 75, arr[(count % 7) + 1].Block[i].y, length, length, arr[(count % 7) + 1].color, 1, "white");
     }
 }
 
