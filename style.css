@@ -13,5 +13,18 @@ canvas {
 .next{
     position: absolute;
     left: 50%;
+    margin-left: 130px;
+}
+
+.store{
+    position: absolute;
+    left: 50%;
     margin-left: -230px;
+}
+
+.score{
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: 110px;
 }
