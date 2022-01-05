@@ -2,7 +2,6 @@ const length = 25;
 const pieces = [new I, new T, new J, new L, new S, new Z, new O]
 var nextArr = shuffle(pieces);
 var arr = [];
-
 var count = 0;
 var piece;
 var field = [
@@ -50,18 +49,14 @@ function update() {
 }
 
 function getPiece() {
+    if(count % 7 == 0) {
+        arr = nextArr;
+        nextArr = shuffle([new I, new T, new J, new L, new S, new Z, new O])
+    }
     piece = arr[count % 7];
     stop = false;
 }
 
-function loadArray() {
-    if(count % 7 == 0) {
-        arr = nextArr;
-        arr = shuffle(pieces);
-
-           
-    }
-}
 function shuffle(arr) {
     index = arr.length;
     while (index > 0) {
@@ -74,10 +69,17 @@ function shuffle(arr) {
 
 function drawNext(){
     drawRectangle(ctx, 0, 0, length * 4, length * 4, "white")
-    if
-    for (var i = 0; i < 4; i++){
-        drawRectangle(ctx, arr[(count % 7) + 1].Block[i].x - 75, arr[(count % 7) + 1].Block[i].y, length, length, arr[(count % 7) + 1].color, 1, "white");
+    if(count > 0 && ((count % 7) % 6) == 0) {
+        for (var i = 0; i < 4; i++){
+            drawRectangle(ctx, nextArr[0].Block[i].x - 75, nextArr[0].Block[i].y, length, length, nextArr[0].color, 1, "white");
+        }
     }
+    else{
+        for (var i = 0; i < 4; i++){
+            drawRectangle(ctx, arr[(count % 7) + 1].Block[i].x - 75, arr[(count % 7) + 1].Block[i].y, length, length, arr[(count % 7) + 1].color, 1, "white");
+        }
+    }
+    
 }
 
 function movePiece(direction) {
