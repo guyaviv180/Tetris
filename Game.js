@@ -5,6 +5,12 @@ var count = 0;
 var lines = 0;
 var piece;
 var sidePiece;
+var stop = false;
+var swap = true;
+var fps = 64;
+var level = 1;
+var bubs = "adi";
+var baleep = bubs;
 var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -27,7 +33,6 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-var stop = false;
 window.onload = function () {
     canvas = document.getElementById("playBoard");
     context = canvas.getContext("2d");
@@ -39,17 +44,28 @@ window.onload = function () {
     scoreContext = scoreCanvas.getContext("2d");
     getPiece();
     draw();
-    setInterval(function () { update(); }, 1000)
+    setInterval(function () { update(); }, 1000 / fps)
+    setInterval(function () { piece.move("down"); }, 1000 / level);
     addEventListener("keydown", onKeyDown);
 }
 function update() {
+    var wait = setTimeout(session, 1000 / level);
+}
+
+function session(){
     checkStop(piece);
     if (stop) {
         if (checkStop(piece)) {
-            count++; changeField(); checkClear(); getPiece(); draw();
+            count++; swap = true; changeField(); checkClear(); getPiece(); draw();
         }
     }
-    piece.move("down");
+    draw();
+}
+
+function drop(){
+    while (!checkStop(piece)) {
+        piece.move("down");
+    }
     draw();
 }
 
@@ -68,10 +84,15 @@ function drawStore(){
 }
 
 function store() {
+    if (swap == false){
+        draw();
+        return;
+    } 
     if (sidePiece == null) {
         var temp1 = new piece.constructor;
         sidePiece = temp1;
         count++;
+        swap = false;
         getPiece();
     }
     else {
@@ -79,6 +100,7 @@ function store() {
         var temp2 = new sidePiece.constructor;
         arr[count % 7] = temp2;
         sidePiece = temp1;
+        swap = false;
         getPiece();
     }
     draw();
@@ -309,5 +331,7 @@ function onKeyDown(event) {
         case 67:
             store();
             break;
+        case 32:
+            drop(); 
     }
 }
