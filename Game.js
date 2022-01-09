@@ -5,7 +5,6 @@ var count = 0;
 var lines = 0;
 var piece;
 var sidePiece;
-var stop = false;
 var swap = true;
 var fps = 64;
 var level = 1;
@@ -49,17 +48,26 @@ window.onload = function () {
     addEventListener("keydown", onKeyDown);
 }
 function update() {
-    var wait = setTimeout(session, 1000 / level);
-}
-
-function session(){
-    checkStop(piece);
-    if (stop) {
-        if (checkStop(piece)) {
-            count++; swap = true; changeField(); checkClear(); getPiece(); draw();
-        }
+    if (checkStop(piece)) {
+        count++; swap = true; changeField(); checkClear(); getPiece(); draw();
     }
     draw();
+}
+
+function checkStop(piece) {
+    for (var i = 0; i < 4; i++) {
+        if (piece.Block[i].y >= ((20 * length) - length)) {
+            return true;
+        }
+    }
+    for (var i = 0; i < 4; i++) {
+        yUnder = ((piece.Block[i].y + length) / length)
+        xUnder = ((piece.Block[i].x) / length)
+        if (field[yUnder][xUnder] > 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function drop(){
@@ -67,20 +75,6 @@ function drop(){
         piece.move("down");
     }
     draw();
-}
-
-function drawScore(){
-    drawRectangle(scoreContext, 0, 0, length * 4, length * 12, "white")
-    drawText(scoreContext, 5, 50, "18px Arial", "black", "lines: " + lines.toString());
-    drawText(scoreContext, 5, 70, "18px Arial", "black", "pieces: " + count.toString());
-
-}
-
-function drawStore(){
-    drawRectangle(storeContext, 0, 0, length * 4, length * 4, "white")
-    for (var i = 0; i < 4; i++) {
-        drawRectangle(storeContext, sidePiece.Block[i].x - 75, sidePiece.Block[i].y, length, length, sidePiece.color, 1, "white");
-    }
 }
 
 function store() {
@@ -106,42 +100,12 @@ function store() {
     draw();
 }
 
-function drawFinal() {
-    var pos = new piece.constructor;
-    pos.clone(piece);
-    while (!checkStop(pos)) {
-        pos.move("down");
-    }
-    for (var i = 0; i < 4; i++) {
-        drawRectangle(context, pos.Block[i].x, pos.Block[i].y, length, length, "DarkGray", 1, "white");
-    }
-}
-
-function checkStop(piece) {
-    for (var i = 0; i < 4; i++) {
-        if (piece.Block[i].y >= ((20 * length) - length)) {
-            stop = true;
-            return true;
-        }
-    }
-    for (var i = 0; i < 4; i++) {
-        yUnder = ((piece.Block[i].y + length) / length)
-        xUnder = ((piece.Block[i].x) / length)
-        if (field[yUnder][xUnder] > 0) {
-            stop = true;
-            return true
-        }
-    }
-    return false;
-}
-
 function getPiece() {
     if (count % 7 == 0) {
         arr = nextArr;
         nextArr = shuffle([new I, new T, new J, new L, new S, new Z, new O])
     }
     piece = arr[count % 7];
-    stop = false;
 }
 
 function shuffle(arr) {
@@ -152,21 +116,6 @@ function shuffle(arr) {
         [arr[index], arr[rnd]] = [arr[rnd], arr[index]];
     }
     return arr
-}
-
-function drawNext() {
-    drawRectangle(nextContext, 0, 0, length * 4, length * 4, "white")
-    if (count > 0 && count % 7 != 0 && ((count % 7) % 6) == 0) {
-        for (var i = 0; i < 4; i++) {
-            drawRectangle(nextContext, nextArr[0].Block[i].x - 75, nextArr[0].Block[i].y, length, length, nextArr[0].color, 1, "white");
-        }
-    }
-    else {
-        for (var i = 0; i < 4; i++) {
-            drawRectangle(nextContext, arr[(count % 7) + 1].Block[i].x - 75, arr[(count % 7) + 1].Block[i].y, length, length, arr[(count % 7) + 1].color, 1, "white");
-        }
-    }
-
 }
 
 function movePiece(direction) {
@@ -192,7 +141,6 @@ function movePiece(direction) {
             }
             break;
     }
-    checkStop(piece);
     draw();
 }
 
@@ -203,23 +151,7 @@ function turnPiece() {
     if (checkPosition(pos)) {
         piece.turn();
     }
-    checkStop(piece);
     draw();
-}
-
-function checkPosition(pos) {
-    for (var i = 0; i < 4; i++) {
-        if (pos.Block[i].y > (19 * length) ||
-            pos.Block[i].y < 0 ||
-            pos.Block[i].x > (9 * length) ||
-            pos.Block[i].x < 0) {
-            return false;
-        }
-        if ((field[((pos.Block[i].y) / 25)][((pos.Block[i].x) / 25)]) > 0) {
-            return false;
-        }
-    }
-    return true;
 }
 
 function clearLine(line) {
@@ -234,61 +166,13 @@ function clearLine(line) {
     lines++;
 }
 
-function checkClear() {
-    var full = true;
-    for (var i = 0; i < 20; i++) {
-        full = true;
-        for (var j = 0; j < 10; j++) {
-            if (field[i][j] == 0) {
-                full = false;
-            }
-        }
-        if (full) { clearLine(i); }
-    }
-}
-
 function changeField() {
-    if (stop) {
+    if (checkStop(piece)) {
         for (var i = 0; i < 4; i++) {
             indexX = (piece.Block[i].x / length);
             indexY = (piece.Block[i].y / length);
             field[indexY][indexX] = piece.index;
         }
-    }
-}
-
-function draw() {
-    drawBoard();
-    drawNext();
-    if(sidePiece != null){
-        drawStore();
-    }
-    drawScore();
-    drawFinal();
-    drawPieces();
-}
-
-function drawPieces() {
-    for (var i = 0; i < 20; i++) {
-        for (var j = 0; j < 10; j++) {
-            c = getColor(field[i][j]);
-            if (c != "white") {
-                drawRectangle(context, j * length, i * length, length, length, c, 0.5, "grey");
-            }
-        }
-    }
-    for (var t = 0; t < 4; t++) {
-        drawRectangle(context, piece.Block[t].x, piece.Block[t].y, length, length, piece.color, 1, "white");
-    }
-}
-
-function drawBoard() {
-    drawRectangle(context, 0, 0, 250, 500, "white", 0.5, "grey");
-    for (var i = 1; i < 10; i++) {
-        drawLine(context, (length * i), 0, (length * i), (length * 20), 1, "grey");
-    }
-    for (var i = 1; i < 20; i++) {
-        drawLine(context, 0, (length * i), (length * 10), (length * i), 1, "grey");
     }
 }
 
