@@ -8,7 +8,7 @@ function checkPosition(pos) {
             pos.Block[i].x < 0) {
             return false;
         }
-        if ((field[((pos.Block[i].y) / 25)][((pos.Block[i].x) / 25)]) > 0) {
+        if ((field[((pos.Block[i].y) / length)][((pos.Block[i].x) / length)]) > 0) {
             return false;
         }
     }

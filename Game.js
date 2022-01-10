@@ -5,9 +5,12 @@ var count = 0;
 var lines = 0;
 var piece;
 var sidePiece;
+var waiting = false;
+var place = false;
 var swap = true;
 var fps = 64;
 var level = 1;
+var delay = 1000 / level; 
 var bubs = "adi";
 var baleep = bubs;
 var field = [
@@ -44,26 +47,39 @@ window.onload = function () {
     getPiece();
     draw();
     setInterval(function () { update(); }, 1000 / fps)
-    setInterval(function () { piece.move("down"); }, 1000 / level);
+    setInterval(function () { drop(); }, 1000 / level);
     addEventListener("keydown", onKeyDown);
 }
 function update() {
-    if (checkStop(piece)) {
-        count++; swap = true; changeField(); checkClear(); getPiece(); draw();
+    if (checkStop(piece) && waiting == false) {
+        if(place == false){
+            waiting = true;
+            wait();
+        }
+        if(place == true){
+            count++; swap = true; changeField(); checkClear(); getPiece(); place = false;
+        }
     }
     draw();
 }
 
+function wait(){
+    setTimeout(function(){
+        waiting = false
+        place = true;
+    }, delay);
+}
+
 function checkStop(piece) {
     for (var i = 0; i < 4; i++) {
-        if (piece.Block[i].y >= ((20 * length) - length)) {
+        if (piece.Block[i].y >= 19 * length) {
             return true;
         }
     }
     for (var i = 0; i < 4; i++) {
-        yUnder = ((piece.Block[i].y + length) / length)
-        xUnder = ((piece.Block[i].x) / length)
-        if (field[yUnder][xUnder] > 0) {
+        yUnder = (piece.Block[i].y + length) / length
+        x = piece.Block[i].x / length
+        if (field[yUnder][x] > 0) {
             return true;
         }
     }
@@ -71,9 +87,17 @@ function checkStop(piece) {
 }
 
 function drop(){
+    if(!checkStop(piece) && waiting == false){
+        piece.move("down");
+    }
+}
+
+function hardDrop(){
+    delay = 0;
     while (!checkStop(piece)) {
         piece.move("down");
     }
+    delay = 1000 / level;
     draw();
 }
 
@@ -216,6 +240,6 @@ function onKeyDown(event) {
             store();
             break;
         case 32:
-            drop(); 
+            hardDrop(); 
     }
 }
