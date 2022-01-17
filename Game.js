@@ -1,3 +1,4 @@
+var pause = true;
 const length = 25;
 var nextArr = shuffle([new I, new T, new J, new L, new S, new Z, new O]);
 var arr = [];
@@ -8,6 +9,7 @@ var sidePiece;
 var waiting = false;
 var place = false;
 var swap = true;
+var time = 0;
 var fps = 64;
 var level = 1;
 var delay = 1000 / level; 
@@ -36,20 +38,37 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 window.onload = function () {
-    canvas = document.getElementById("playBoard");
-    context = canvas.getContext("2d");
+    play = document.getElementById("play");
+    gameCanvas = document.getElementById("gameBoard");
+    context = gameCanvas.getContext("2d");
     nextCanvas = document.getElementById("nextBoard");
     nextContext = nextCanvas.getContext("2d");
     storeCanvas = document.getElementById("storeBoard");
     storeContext = storeCanvas.getContext("2d");
     scoreCanvas = document.getElementById("scoreBoard");
     scoreContext = scoreCanvas.getContext("2d");
+    timerCanvas = document.getElementById("timerBoard");
+    timerContext = timerCanvas.getContext("2d");   
+}
+
+function game(){
+    pause = false;
+    gameCanvas.style.display = "block";
+    nextCanvas.style.display = "block";
+    storeCanvas.style.display = "block";
+    scoreCanvas.style.display = "block";
+    timerCanvas.style.display = "block";
+    play.style.display = "none";
     getPiece();
     draw();
-    setInterval(function () { update(); }, 1000 / fps)
-    setInterval(function () { drop(); }, 1000 / level);
+    if(pause == false){
+        setInterval(function () { timer(); }, 10)
+        setInterval(function () { update(); }, 1000 / fps)
+        setInterval(function () { drop(); }, 1000 / level);
+    }
     addEventListener("keydown", onKeyDown);
 }
+
 function update() {
     if (checkStop(piece) && waiting == false) {
         if(place == false){
@@ -63,6 +82,12 @@ function update() {
     draw();
 }
 
+function pause(){
+    if(pause == true){ pause = false; }
+    else{ pause = true; }
+    update();
+}
+
 function wait(){
     setTimeout(function(){
         waiting = false
@@ -70,26 +95,11 @@ function wait(){
     }, delay);
 }
 
-function checkStop(piece) {
-    for (var i = 0; i < 4; i++) {
-        if (piece.Block[i].y >= 19 * length) {
-            return true;
-        }
-    }
-    for (var i = 0; i < 4; i++) {
-        yUnder = (piece.Block[i].y + length) / length
-        x = piece.Block[i].x / length
-        if (field[yUnder][x] > 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function drop(){
     if(!checkStop(piece) && waiting == false){
         piece.move("down");
     }
+    update();
 }
 
 function hardDrop(){
@@ -97,8 +107,8 @@ function hardDrop(){
     while (!checkStop(piece)) {
         piece.move("down");
     }
+    update();
     delay = 1000 / level;
-    draw();
 }
 
 function store() {
@@ -117,9 +127,9 @@ function store() {
         var temp1 = new piece.constructor;
         var temp2 = new sidePiece.constructor;
         arr[count % 7] = temp2;
+        piece = arr[count % 7];
         sidePiece = temp1;
         swap = false;
-        getPiece();
     }
     draw();
 }
@@ -165,7 +175,7 @@ function movePiece(direction) {
             }
             break;
     }
-    draw();
+    update();
 }
 
 function turnPiece() {
@@ -175,7 +185,7 @@ function turnPiece() {
     if (checkPosition(pos)) {
         piece.turn();
     }
-    draw();
+    update();
 }
 
 function clearLine(line) {
@@ -240,6 +250,8 @@ function onKeyDown(event) {
             store();
             break;
         case 32:
-            hardDrop(); 
+            hardDrop();
+        case 27:
+            pause(); 
     }
 }

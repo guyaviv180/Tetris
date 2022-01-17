@@ -5,11 +5,13 @@
     <title></title>
 </head>
 <body>
+    <button id="play" onclick="game()">PLAY!</button>
     <link rel="stylesheet" type="text/css" href="./style.css"/>
+    <canvas id="gameBoard" height="500" width="250" class = "main"></canvas>
     <canvas id="storeBoard" height="100" width="100" class = "store"></canvas>
-    <canvas id="playBoard" height="500" width="250" class = "main"></canvas>
     <canvas id="nextBoard" height="100" width="100" class = "next"></canvas>
     <canvas id="scoreBoard" height="300" width="100" class = "score"></canvas>
+    <canvas id="timerBoard" height="50" width="100" class = "timer"></canvas>
     <script src="graphics.js"></script>
     <script src="Piece.js"></script>
     <script src="checkers.js"></script>

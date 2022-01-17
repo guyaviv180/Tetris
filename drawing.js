@@ -33,8 +33,19 @@ function drawPieces() {
     }
 }
 
+function drawFinal() {
+    var pos = new piece.constructor;
+    pos.clone(piece);
+    while (!checkStop(pos)) {
+        pos.move("down");
+    }
+    for (var i = 0; i < 4; i++) {
+        drawRectangle(context, pos.Block[i].x, pos.Block[i].y, length, length, "DarkGray", 1, "white");
+    }
+}
+
 function drawNext() {
-    drawRectangle(nextContext, 0, 0, length * 4, length * 4, "white")
+    drawRectangle(nextContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
     if (count > 0 && count % 7 != 0 && ((count % 7) % 6) == 0) {
         for (var i = 0; i < 4; i++) {
             drawRectangle(nextContext, nextArr[0].Block[i].x - 75, nextArr[0].Block[i].y, length, length, nextArr[0].color, 1, "white");
@@ -49,26 +60,31 @@ function drawNext() {
 }
 
 function drawStore(){
-    drawRectangle(storeContext, 0, 0, length * 4, length * 4, "white")
+    drawRectangle(storeContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
     for (var i = 0; i < 4; i++) {
         drawRectangle(storeContext, sidePiece.Block[i].x - 75, sidePiece.Block[i].y, length, length, sidePiece.color, 1, "white");
     }
 }
 
 function drawScore(){
-    drawRectangle(scoreContext, 0, 0, length * 4, length * 12, "white")
+    drawRectangle(scoreContext, 0, 0, length * 4, length * 12, "white", 0.5, "grey")
     drawText(scoreContext, 5, 50, "18px Arial", "black", "lines: " + lines.toString());
     drawText(scoreContext, 5, 70, "18px Arial", "black", "pieces: " + count.toString());
 
 }
 
-function drawFinal() {
-    var pos = new piece.constructor;
-    pos.clone(piece);
-    while (!checkStop(pos)) {
-        pos.move("down");
-    }
-    for (var i = 0; i < 4; i++) {
-        drawRectangle(context, pos.Block[i].x, pos.Block[i].y, length, length, "DarkGray", 1, "white");
-    }
+function timer(){
+    drawRectangle(timerContext, 0, 0, length * 4, length * 2, "white", 0.5, "grey")
+    var miliseconds = ((Math.floor(time / 10)) % 100);
+    var seconds = (Math.floor(time / 1000)) % 60;
+    var minutes = (Math.floor(time / 60000)) % 100;
+    
+    
+    drawText(timerContext, 5, 20, "18px Arial", "black", "time:")
+    drawText(timerContext, 5, 40, "18px Arial", "black", 
+    (('0' + minutes).slice(-2)).toString() + ":" + 
+    (('0' + seconds).slice(-2)).toString() + ":" + 
+    (('0' + miliseconds).slice(-2)).toString()
+    )
+    time += 10;
 }

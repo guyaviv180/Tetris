@@ -1,4 +1,18 @@
-
+function checkStop(piece) {
+    for (var i = 0; i < 4; i++) {
+        if (piece.Block[i].y >= 19 * length) {
+            return true;
+        }
+    }
+    for (var i = 0; i < 4; i++) {
+        yUnder = (piece.Block[i].y + length) / length
+        x = piece.Block[i].x / length
+        if (field[yUnder][x] > 0) {
+            return true;
+        }
+    }
+    return false;
+}
 
 function checkPosition(pos) {
     for (var i = 0; i < 4; i++) {
