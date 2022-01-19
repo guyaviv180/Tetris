@@ -1,20 +1,22 @@
-var pause = true;
-const length = 25;
-var nextArr = shuffle([new I, new T, new J, new L, new S, new Z, new O]);
-var arr = [];
-var count = 0;
-var lines = 0;
-var piece;
-var sidePiece;
-var waiting = false;
-var place = false;
-var swap = true;
-var time = 0;
-var fps = 64;
+//game data
+const fps = 64;
 var level = 1;
-var delay = 1000 / level; 
-var bubs = "adi";
-var baleep = bubs;
+var delay = 1000 / level; //current delay time
+var pause = true; // game pause state
+var waiting = false; // is piece waiting to stop
+var place = false; // did game final place piece
+var swap = true; // did player swap piece
+var time = 0; // game time in miliseconds
+
+//piece data
+const length = 25; // length of block in pixels
+var nextArr = shuffle([new I, new T, new J, new L, new S, new Z, new O]); // array of next pieces
+var arr = []; // current pieces
+var count = 0; //piece count
+var score = 0; // game score
+var lines = 0; // lines cleared
+var piece; // current piece
+var sidePiece; // current stored piece
 var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -36,19 +38,30 @@ var field = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+]; // game field
+
+//sound data
+var bubs = "adi";
+var baleep = bubs;
+
 window.onload = function () {
     play = document.getElementById("play");
+
+    paused = document.getElementById("paused");
     gameCanvas = document.getElementById("gameBoard");
     context = gameCanvas.getContext("2d");
+
     nextCanvas = document.getElementById("nextBoard");
     nextContext = nextCanvas.getContext("2d");
+    
     storeCanvas = document.getElementById("storeBoard");
     storeContext = storeCanvas.getContext("2d");
+    
     scoreCanvas = document.getElementById("scoreBoard");
     scoreContext = scoreCanvas.getContext("2d");
+    
     timerCanvas = document.getElementById("timerBoard");
-    timerContext = timerCanvas.getContext("2d");   
+    timerContext = timerCanvas.getContext("2d");
 }
 
 function game(){
@@ -61,30 +74,62 @@ function game(){
     play.style.display = "none";
     getPiece();
     draw();
-    if(pause == false){
-        setInterval(function () { timer(); }, 10)
-        setInterval(function () { update(); }, 1000 / fps)
-        setInterval(function () { drop(); }, 1000 / level);
-    }
+    setInterval(function () { 
+        if(!pause){ timer(); }
+    }, 10)
+
+    setInterval(function () {
+        if(!pause){ update(); }
+    }, 1000 / fps)
+
+    setInterval(function () { 
+        if(!pause){ drop(); }
+    }, 1000 / level);
+
     addEventListener("keydown", onKeyDown);
 }
 
 function update() {
-    if (checkStop(piece) && waiting == false) {
-        if(place == false){
+    if (checkStop(piece) && !waiting) {
+        if(!place){
             waiting = true;
             wait();
         }
-        if(place == true){
+        if(place){
             count++; swap = true; changeField(); checkClear(); getPiece(); place = false;
         }
     }
     draw();
 }
 
-function pause(){
-    if(pause == true){ pause = false; }
-    else{ pause = true; }
+function handleExceptions() {
+    var command = new {i: 0, d: ""};
+}
+
+function checkPosition(pos) {
+    for (var i = 0; i < 4; i++) {
+        if (pos.Block[i].y > (19 * length) ||
+            pos.Block[i].y < 0 ||
+            pos.Block[i].x > (9 * length) ||
+            pos.Block[i].x < 0) {
+            return false;
+        }
+        if ((field[((pos.Block[i].y) / length)][((pos.Block[i].x) / length)]) > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function pauseGame(){
+    if(pause){
+        paused.style.display = "none";
+        pause = false;
+    }
+    else{
+        paused.style.display = "block";
+        pause = true; 
+    }
     update();
 }
 
@@ -96,8 +141,8 @@ function wait(){
 }
 
 function drop(){
-    if(!checkStop(piece) && waiting == false){
-        piece.move("down");
+    if(!checkStop(piece) && !waiting){
+        movePiece("down");
     }
     update();
 }
@@ -105,7 +150,7 @@ function drop(){
 function hardDrop(){
     delay = 0;
     while (!checkStop(piece)) {
-        piece.move("down");
+        movePiece("down");
     }
     update();
     delay = 1000 / level;
@@ -120,6 +165,7 @@ function store() {
         var temp1 = new piece.constructor;
         sidePiece = temp1;
         count++;
+        place = false;
         swap = false;
         getPiece();
     }
@@ -129,6 +175,7 @@ function store() {
         arr[count % 7] = temp2;
         piece = arr[count % 7];
         sidePiece = temp1;
+        place = false;
         swap = false;
     }
     draw();
@@ -233,6 +280,12 @@ function getColor(num) {
 
 function onKeyDown(event) {
     var keyCode = event.keyCode;
+    if(keyCode == 27){
+        pauseGame();
+    }
+    if(pause){
+        return;
+    }
     switch (keyCode) {
         case 39:
             movePiece("right");
@@ -251,7 +304,6 @@ function onKeyDown(event) {
             break;
         case 32:
             hardDrop();
-        case 27:
-            pause(); 
+            break;
     }
 }
