@@ -3,17 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-</head>
+</head>  
 <body>
-    <button id="play" onclick="game()">
-        <span style="color: purple;">T</span>
-        <span style="color: cyan;">E</span>
-        <span style="color: orange;">T</span>
-        <span style="color: blue;">R</span>
-        <span style="color: red;">I</span>
-        <span style="color: lime;">S</span>
-        <span style="color: yellow;">!</span>
-    </button>
+    <img src="img/TETRIS.png" id="title">
+    <!-- <div id="cover"></div> -->
+    <table id="menu">
+        <tr onclick="game()">
+            <td>singleplayer</td>
+        </tr>
+        <tr>
+            <td>multiplayer</td>
+        </tr>
+        <tr>
+            <td>options</td>
+        </tr>
+    </table>
     <link rel="stylesheet" type="text/css" href="./style.css"/>
     <canvas id="gameBoard" height="500" width="250" class = "main"></canvas>
     <canvas id="storeBoard" height="100" width="100" class = "store"></canvas>
@@ -25,6 +29,7 @@
     <script src="Piece.js"></script>
     <script src="checkers.js"></script>
     <script src="drawing.js"></script>
+    <script src="visuals.js"></script>
     <script src="Game.js"></script>
 </body>
 </html>

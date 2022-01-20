@@ -45,9 +45,8 @@ var bubs = "adi";
 var baleep = bubs;
 
 window.onload = function () {
-    play = document.getElementById("play");
-
     paused = document.getElementById("paused");
+    
     gameCanvas = document.getElementById("gameBoard");
     context = gameCanvas.getContext("2d");
 
@@ -66,12 +65,7 @@ window.onload = function () {
 
 function game(){
     pause = false;
-    gameCanvas.style.display = "block";
-    nextCanvas.style.display = "block";
-    storeCanvas.style.display = "block";
-    scoreCanvas.style.display = "block";
-    timerCanvas.style.display = "block";
-    play.style.display = "none";
+    moveToGame();
     getPiece();
     draw();
     setInterval(function () { 
@@ -85,7 +79,7 @@ function game(){
     setInterval(function () { 
         if(!pause){ drop(); }
     }, 1000 / level);
-
+    
     addEventListener("keydown", onKeyDown);
 }
 
@@ -161,7 +155,7 @@ function store() {
         draw();
         return;
     } 
-    if (sidePiece == null) {
+    else if (sidePiece == null) {
         var temp1 = new piece.constructor;
         sidePiece = temp1;
         count++;
