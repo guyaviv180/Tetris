@@ -4,28 +4,13 @@ img{
     margin-left: auto; 
     margin-right: auto;
     margin-top: 40px;
+    cursor: pointer;
     transition: transform 1.5s;
 }
 
 img:hover{
     transform: scale(1.2)
 }   
-
-/* div{
-    position:absolute;
-    background-color: "white";
-    top: 214.67px;
-    height: 0px;
-    width: 99%;
-    z-index: 9999;
-    transition: top 1s, height 1s;
-}
-
-.open{
-    top: 40px;
-    height: 214.67px;
-} */
-
 
 table{
     position:relative;
@@ -40,6 +25,7 @@ tr{
     font-size: 20px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     margin-top: 20px;
+    cursor: pointer;
     transition: transform 1s, font-size 1s;
 }
 
