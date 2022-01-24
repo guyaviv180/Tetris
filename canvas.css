@@ -1,0 +1,48 @@
+canvas {
+    background-color:white;
+    border: 0.5px solid black;
+    display : none;
+}
+
+.main{
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;   
+}
+
+.next{
+    position: absolute;
+    left: 50%;
+    margin-left: 130px;
+}
+
+.store{
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
+}
+
+.score{
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: 110px;
+}
+
+.timer{
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: 410px;
+}
+
+.pause{
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 30%;
+    width: 99%;
+    color: darkgray;
+    font-size: 60px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

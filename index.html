@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html> 
+<html>          
 <head>
     <meta charset="utf-8" />
     <title></title>
 </head>  
 <body>
-    <input type="checkbox" id="title"></input>
-    <label for="title"><img src="img/TETRIS.png"/></label>
-    <table id="menu">
-        <tr onclick="game()">
-            <td>singleplayer</td>
-        </tr>
-        <tr>
-            <td>multiplayer</td>
-        </tr>
-        <tr>
-            <td>options</td>
-        </tr>
-    </table>
-    <link rel="stylesheet" type="text/css" href="./style.css"/>
+    <input type="checkbox" id="title" style="display: none;"></input>
+    <label for="title" id="img"><img src="img/TETRIS.png"/></label>
+    <div id="menu">
+        <table>
+            <tr onclick="game()">
+                <td>singleplayer</td>
+            </tr>
+            <tr>
+                <td>multiplayer</td>
+            </tr>
+            <tr>
+                <td>options</td>
+            </tr>
+        </table>
+    </div>
+    <link rel="stylesheet" type="text/css" href="./main.css"/>
+    <link rel="stylesheet" type="text/css" href="./canvas.css"/>
     <canvas id="gameBoard" height="500" width="250" class = "main"></canvas>
     <canvas id="storeBoard" height="100" width="100" class = "store"></canvas>
     <canvas id="nextBoard" height="100" width="100" class = "next"></canvas>

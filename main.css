@@ -1,0 +1,63 @@
+img{
+    position: relative;
+    display: block;
+    margin-left: auto; 
+    margin-right: auto;
+    margin-top: 40px;
+    cursor: pointer;
+    transition: transform 1.5s;
+}
+
+img:hover{
+    transform: scale(1.2)
+}   
+
+#menu{
+    overflow: hidden;
+    transition: max-height 1s;
+}
+
+input[type="checkbox"]:not(:checked) ~ #menu {
+    max-height: 0;
+}
+
+input[type="checkbox"]:checked ~ #menu {
+    max-height: 300px;
+}
+
+table{
+    position:relative;
+    left: 50%;
+    transform: translate(-50%,0);
+    border-collapse: separate;
+    border-spacing: 15px;
+}
+
+td{
+    /* placement */
+    margin-top: 20px;
+
+    /* shape and color */
+    height: 50px;
+    width: 150px;
+    background-color: lightgrey;
+    border: 1px solid black;
+
+    /* text */
+    font-size: 20px;
+    text-align: center;
+    color:black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+    /* vfx */
+    cursor: pointer;
+    transition: transform 1s, font-size 1s;
+}
+
+td:hover{
+    font-size:25px;
+    color: white;
+    background-color: darkgray;
+    border: 1px solid white;
+    transform: scale(1.2);
+}
