@@ -10,7 +10,3 @@ function moveToGame(){
       cols[i].style.display = "block";
     }
 }
-
-// function toggleMenu(){
-//     document.getElementById("cover").classList.toggle('open');
-// }
