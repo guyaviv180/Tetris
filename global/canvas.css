@@ -1,36 +1,40 @@
+.left{
+    left: 25%;
+}
+
+.right{
+    left: 75%;
+}
+
 canvas {
     background-color:white;
     border: 0.5px solid black;
+    left: 50%;
 }
 
 .main{
     position: absolute;
-    left: 50%;
     margin-left: -125px;   
 }
 
 .next{
     position: absolute;
-    left: 50%;
     margin-left: 130px;
 }
 
 .store{
     position: absolute;
-    left: 50%;
     margin-left: -230px;
 }
 
 .score{
     position: absolute;
-    left: 50%;
     margin-left: -230px;
     margin-top: 110px;
 }
 
 .timer{
     position: absolute;
-    left: 50%;
     margin-left: -230px;
     margin-top: 410px;
 }

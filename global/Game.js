@@ -1,9 +1,16 @@
 const length = 25; // length of block in pixels
+const fps = 60;
 class Game{
-    constructor(){
-        //board data
+    constructor(gameContext, nextContext, storeContext, scoreContext, timerContext, rightKey, leftKey, turnKey, dropKey, storeKey, hardDropKey){
+        //keys
+        this.rightKey = rightKey;
+        this.leftKey = leftKey;
+        this.turnKey = turnKey;
+        this.dropKey = dropKey;
+        this.storeKey = storeKey;
+        this.hardDropKey = hardDropKey;
+
         //game data
-        this.fps = 64;
         this.level = 1;
         this.delay = 1000 / this.level; //current delay time
         this.pause = true; // game pause state
@@ -11,6 +18,13 @@ class Game{
         this.place = false; // did game final place piece
         this.swap = true; // did player swap piece
         this.time = 0; // game time in miliseconds
+        
+        //board data
+        this.gameContext = gameContext;
+        this.nextContext = nextContext;
+        this.storeContext = storeContext;
+        this.scoreContext = scoreContext;
+        this.timerContext = timerContext;
 
         //piece data
         this.nextArr = this.shuffle([new I, new T, new J, new L, new S, new Z, new O]); // array of next pieces
@@ -54,7 +68,7 @@ class Game{
         this.draw();
         setInterval(this.timer.bind(this), 10)
     
-        setInterval(this.update.bind(this), 1000 / this.fps)
+        setInterval(this.update.bind(this), 1000 / fps)
         
         setInterval(this.drop.bind(this), 1000 / this.level);
         
@@ -252,22 +266,22 @@ class Game{
             return;
         }
         switch (keyCode) {
-            case 39:
+            case this.rightKey:
                 this.movePiece("right");
                 break;
-            case 37:
+            case this.leftKey:
                 this.movePiece("left");
                 break;
-            case 38:
+            case this.turnKey:
                 this.turnPiece();
                 break;
-            case 40:
+            case this.dropKey:
                 this.movePiece("down");
                 break;
-            case 67:
+            case this.storeKey:
                 this.store();
                 break;
-            case 32:
+            case this.hardDropKey:
                 this.hardDrop();
                 break;
         }
@@ -333,12 +347,12 @@ class Game{
     }
     
     drawBoard() {
-        drawRectangle(context, 0, 0, 250, 500, "white", 0.5, "grey");
+        drawRectangle(this.gameContext, 0, 0, 250, 500, "white", 0.5, "grey");
         for (var i = 1; i < 10; i++) {
-            drawLine(context, (length * i), 0, (length * i), (length * 20), 1, "grey");
+            drawLine(this.gameContext, (length * i), 0, (length * i), (length * 20), 1, "grey");
         }
         for (var i = 1; i < 20; i++) {
-            drawLine(context, 0, (length * i), (length * 10), (length * i), 1, "grey");
+            drawLine(this.gameContext, 0, (length * i), (length * 10), (length * i), 1, "grey");
         }
     }
     
@@ -348,12 +362,12 @@ class Game{
             for (var j = 0; j < 10; j++) {
                 c = this.getColor(this.field[i][j]);
                 if (c != "white") {
-                    drawRectangle(context, j * length, i * length, length, length, c, 0.5, "grey");
+                    drawRectangle(this.gameContext, j * length, i * length, length, length, c, 0.5, "grey");
                 }
             }
         }
         for (var t = 0; t < 4; t++) {
-            drawRectangle(context, this.piece.Block[t].x, this.piece.Block[t].y, length, length, this.piece.color, 1, "white");
+            drawRectangle(this.gameContext, this.piece.Block[t].x, this.piece.Block[t].y, length, length, this.piece.color, 1, "white");
         }
     }
     
@@ -364,36 +378,36 @@ class Game{
             pos.move("down");
         }
         for (var i = 0; i < 4; i++) {
-            drawRectangle(context, pos.Block[i].x, pos.Block[i].y, length, length, "DarkGray", 1, "white");
+            drawRectangle(this.gameContext, pos.Block[i].x, pos.Block[i].y, length, length, "DarkGray", 1, "white");
         }
     }
     
     drawNext() {
-        drawRectangle(nextContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
+        drawRectangle(this.nextContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
         if (this.count > 0 && this.count % 7 != 0 && ((this.count % 7) % 6) == 0) {
             for (var i = 0; i < 4; i++) {
-                drawRectangle(nextContext, this.nextArr[0].Block[i].x - 75, this.nextArr[0].Block[i].y, length, length, this.nextArr[0].color, 1, "white");
+                drawRectangle(this.nextContext, this.nextArr[0].Block[i].x - 75, this.nextArr[0].Block[i].y, length, length, this.nextArr[0].color, 1, "white");
             }
         }
         else {
             for (var i = 0; i < 4; i++) {
-                drawRectangle(nextContext, this.arr[(this.count % 7) + 1].Block[i].x - 75, this.arr[(this.count % 7) + 1].Block[i].y, length, length, this.arr[(this.count % 7) + 1].color, 1, "white");
+                drawRectangle(this.nextContext, this.arr[(this.count % 7) + 1].Block[i].x - 75, this.arr[(this.count % 7) + 1].Block[i].y, length, length, this.arr[(this.count % 7) + 1].color, 1, "white");
             }
         }
     
     }
     
     drawStore() {
-        drawRectangle(storeContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
+        drawRectangle(this.storeContext, 0, 0, length * 4, length * 4, "white", 0.5, "grey")
         for (var i = 0; i < 4; i++) {
-            drawRectangle(storeContext, this.sidePiece.Block[i].x - 75, this.sidePiece.Block[i].y, length, length, this.sidePiece.color, 1, "white");
+            drawRectangle(this.storeContext, this.sidePiece.Block[i].x - 75, this.sidePiece.Block[i].y, length, length, this.sidePiece.color, 1, "white");
         }
     }
     
     drawScore() {
-        drawRectangle(scoreContext, 0, 0, length * 4, length * 12, "white", 0.5, "grey")
-        drawText(scoreContext, 5, 50, "18px Arial", "black", "this.lines: " + this.lines.toString());
-        drawText(scoreContext, 5, 70, "18px Arial", "black", "pieces: " + this.count.toString());
+        drawRectangle(this.scoreContext, 0, 0, length * 4, length * 12, "white", 0.5, "grey")
+        drawText(this.scoreContext, 5, 50, "18px Arial", "black", "lines: " + this.lines.toString());
+        drawText(this.scoreContext, 5, 70, "18px Arial", "black", "pieces: " + this.count.toString());
     
     }
     
@@ -401,14 +415,14 @@ class Game{
         let miliseconds = 0;
         let seconds = 0;
         let minutes = 0;
-        drawRectangle(timerContext, 0, 0, length * 4, length * 2, "white", 0.5, "grey")
+        drawRectangle(this.timerContext, 0, 0, length * 4, length * 2, "white", 0.5, "grey")
         miliseconds = ((Math.floor(this.time / 10)) % 100);
         seconds = (Math.floor(this.time / 1000)) % 60;
         minutes = (Math.floor(this.time / 60000)) % 100;
         
         
-        drawText(timerContext, 5, 20, "18px Arial", "black", "this.time:")
-        drawText(timerContext, 5, 40, "18px Arial", "black", 
+        drawText(this.timerContext, 5, 20, "18px Arial", "black", "time:")
+        drawText(this.timerContext, 5, 40, "18px Arial", "black", 
         (('0' + minutes).slice(-2)).toString() + ":" + 
         (('0' + seconds).slice(-2)).toString() + ":" + 
         (('0' + miliseconds).slice(-2)).toString()

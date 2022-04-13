@@ -2,7 +2,7 @@ window.onload = function () {
     paused = document.getElementById("paused");
     
     gameCanvas = document.getElementById("gameBoard");
-    context = gameCanvas.getContext("2d");
+    gameContext = gameCanvas.getContext("2d");
 
     nextCanvas = document.getElementById("nextBoard");
     nextContext = nextCanvas.getContext("2d");
@@ -16,7 +16,7 @@ window.onload = function () {
     timerCanvas = document.getElementById("timerBoard");
     timerContext = timerCanvas.getContext("2d");
 
-    var game1 = new Game();
+    var game1 = new Game(gameContext, nextContext, storeContext, scoreContext, timerContext, 39, 37, 38, 40, 67, 32);
     game1.game();
 }
 
