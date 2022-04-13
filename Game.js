@@ -52,13 +52,13 @@ class Game{
         this.pause = false;
         this.getPiece();
         this.draw();
-        //setInterval(this.timer.bind(), 10)
+        setInterval(this.timer.bind(this), 10)
     
-        setInterval(this.update.bind(), 1000 / this.fps)
+        setInterval(this.update.bind(this), 1000 / this.fps)
         
-        setInterval(this.drop.bind(), 1000 / this.level);
+        setInterval(this.drop.bind(this), 1000 / this.level);
         
-        addEventListener("keydown", this.onKeyDown);
+        addEventListener("keydown", this.onKeyDown.bind(this));
     }
     
     update() {
@@ -67,8 +67,13 @@ class Game{
                 this.waiting = true;
                 this.wait();
             }
-            if(this.place){
-                this.count++; this.swap = true; this.changeField(); this.checkClear(); this.getPiece(); this.place = false;
+            else{
+                this.count++;
+                this.swap = true;
+                this.changeField();
+                this.checkClear();
+                this.getPiece();
+                this.place = false;
             }
         }
         this.draw();
@@ -87,15 +92,19 @@ class Game{
     }
     
     wait() {
-        setTimeout(function(){
-            this.waiting = false
-            this.place = true;
-        }, this.delay);
+        setTimeout(
+            this.dumb.bind(this), 
+            this.delay);
+    }
+
+    dumb(){
+        this.waiting = false
+        this.place = true;
     }
     
     drop() {
         if(!this.checkStop(this.piece) && !this.waiting){
-            movePiece("down");
+            this.movePiece("down");
         }
         this.update();
     }
@@ -103,7 +112,7 @@ class Game{
     hardDrop() {
         this.delay = 0;
         while (!this.checkStop(this.piece)) {
-            movePiece("down");
+            this.movePiece("down");
         }
         this.update();
         this.delay = 1000 / this.level;
@@ -202,6 +211,8 @@ class Game{
     }
     
     changeField() {
+        let indexX;
+        let indexY;
         if (this.checkStop(this.piece)) {
             for (var i = 0; i < 4; i++) {
                 indexX = (this.piece.Block[i].x / length);
