@@ -37,4 +37,27 @@ window.onload = function () {
 
     game1.game();
     game2.game();
+    setInterval(
+        function(){ findDifference(game1, game2); }, 5000
+    )
+}
+
+let game1LastLines = 0;
+let game2LastLines = 0;
+
+    
+//functions
+const findDifference = (game1, game2) =>{
+    linesSent = (game1.lines - game1LastLines) - (game2.lines - game2LastLines);
+    if(linesSent == 0){
+        return;
+    }
+    else if(linesSent > 0){
+        game2.receivedLines = linesSent;
+    }
+    else{
+        game1.receivedLines = linesSent;
+    }
+    game1LastLines = game1.lines;
+    game2LastLines = game2.lines;
 }

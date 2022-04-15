@@ -2,13 +2,17 @@ const length = 25; // length of block in pixels
 const fps = 60;
 class Game{
     constructor(gameContext, nextContext, storeContext, scoreContext, timerContext, rightKey, leftKey, turnKey, dropKey, storeKey, hardDropKey){
+        //multiplayer data
+        this.receivedLines = 0;
+        this.canReciveLines = false;
+
         //keys
-        this.rightKey = rightKey;
-        this.leftKey = leftKey;
-        this.turnKey = turnKey;
-        this.dropKey = dropKey;
-        this.storeKey = storeKey;
-        this.hardDropKey = hardDropKey;
+        this.rightKey = rightKey; //move right key
+        this.leftKey = leftKey; // move left key
+        this.turnKey = turnKey; //turn piece key
+        this.dropKey = dropKey; //move down key
+        this.storeKey = storeKey; // store piece key
+        this.hardDropKey = hardDropKey; // hard drop key
 
         //game data
         this.level = 1;
@@ -20,11 +24,11 @@ class Game{
         this.time = 0; // game time in miliseconds
         
         //board data
-        this.gameContext = gameContext;
-        this.nextContext = nextContext;
-        this.storeContext = storeContext;
-        this.scoreContext = scoreContext;
-        this.timerContext = timerContext;
+        this.gameContext = gameContext; // game board context
+        this.nextContext = nextContext; // next pieces board context
+        this.storeContext = storeContext; // stored piece context
+        this.scoreContext = scoreContext; // score board context
+        this.timerContext = timerContext; // timer board context
 
         //piece data
         this.nextArr = this.shuffle([new I, new T, new J, new L, new S, new Z, new O]); // array of next pieces
@@ -84,8 +88,12 @@ class Game{
             else{
                 this.count++;
                 this.swap = true;
+                this.canReciveLines = true;
                 this.changeField();
                 this.checkClear();
+                if(this.canReciveLines){
+                    this.recieveLines(); 
+                }
                 this.getPiece();
                 this.place = false;
             }
@@ -93,6 +101,20 @@ class Game{
         this.draw();
     }
     
+    recieveLines(){
+        for (var i = this.receivedLines; i < 20; i++) {
+            for (var j = 0; j < 10; j++) {
+                this.field[i - this.receivedLines][j] = this.field[i][j];
+            }
+        }
+        for (var i = 19; i > (19 - this.receivedLines); i--) {
+            for (var j = 0; j < 10; j++) {
+                this.field[i][j] = 8;
+            }
+        }
+        this.receivedLines = 0;
+    }
+
     pauseGame() {
         if(this.pause){
             paused.style.display = "none";
@@ -222,6 +244,7 @@ class Game{
             }
         }
         this.lines++;
+        this.canReciveLines = false;
     }
     
     changeField() {
@@ -254,6 +277,8 @@ class Game{
                 return "red"
             case 7:
                 return "yellow"
+            case 8:
+                return "grey"
         }
     }
     
@@ -326,7 +351,7 @@ class Game{
         for (var i = 0; i < 20; i++) {
             full = true;
             for (var j = 0; j < 10; j++) {
-                if (this.field[i][j] == 0) {
+                if (this.field[i][j] == 0 || this.field[i][j] == 8) {
                     full = false;
                 }
             }
